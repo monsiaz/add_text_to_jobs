@@ -1,3 +1,4 @@
+import os
 import requests
 import re
 from bs4 import BeautifulSoup
@@ -10,10 +11,27 @@ from tqdm import tqdm
 import json
 import openai
 import random
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+print("Loading .env file...")
+load_dotenv()
+
+# Vérifier si les variables d'environnement sont chargées
+print(f"Environment variables loaded: {os.environ}")
 
 # Configuration
-API_KEY = 'sk-proj-RZ0LiDtZsP3yuMOk9mSHT3BlbkFJ85KBlBotL0iox0wDxGGv'
-PROXY_FILE = '/Users/simonazoulay/Presentation_Text/Texts_add_bloc_for_jobs/proxyscrape_premium_http_proxies.txt'
+API_KEY = os.getenv('OPENAI_API_KEY')
+PROXY_FILE = os.getenv('PROXY_FILE')
+
+# Debugging: Print the values to ensure they are loaded
+print(f"API_KEY: {API_KEY}")
+print(f"PROXY_FILE: {PROXY_FILE}")
+
+# Ensure that PROXY_FILE is not None
+if not PROXY_FILE:
+    raise ValueError("PROXY_FILE environment variable is not set")
+
 SITEMAP_URL = 'https://sitemaps.infonet.fr/codeRomeJobs/sitemap_code_rome.xml.gz'
 TEST_MODE = True
 TEST_LIMIT = 5
@@ -65,7 +83,7 @@ def scrape_page(driver, url):
     }
     return data
 
-# Function to generate text using GPT-4
+# Function to generate text using GPT-4o
 def generate_text(prompt):
     client = openai.OpenAI(api_key=API_KEY)
     completion = client.chat.completions.create(
