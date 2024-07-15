@@ -71,7 +71,7 @@ def generate_text(prompt):
     completion = client.chat.completions.create(
         model="gpt-4o",
         messages=[
-            {"role": "system", "content": "Tu es un expert du monde de l’emploi. Utilise les informations fournies pour rédiger une fiche métier claire et informative. Intègre ces informations harmonieusement dans un texte fluide et bien structuré, sans les répéter mot pour mot."},
+            {"role": "system", "content": "Tu es un expert du monde de l’emploi. Par ailleurs, tu prendras un soin particulier à avoir des formulations et un style humain (pas un des formulations IA standart, inspires-toi de l'humain et n'articule pas ton plan via la structure des informations fournies.)"},
             {"role": "user", "content": prompt}
         ],
         max_tokens=1000,
@@ -96,7 +96,7 @@ def main():
             f"- Compétences requises : {result['competences']}\n"
             f"- Études et formation : {result['etudes']}\n"
             f"- Avantages et inconvénients : {result['avantages_inconveniant']}\n\n"
-            "Utilise ces informations pour rédiger une fiche métier fluide et claire, en intégrant harmonieusement ces éléments sans les répéter mot pour mot par ailleurs tu ne construira le plan et paragraphes sur ces bases, informations fournie.Pour chaque fiche à générer tu décideras de l'approche la plus utile pour nos lecteurs."
+            "Utilise ces informations pour rédiger une fiche métier fluide et claire, en te basant ces éléments (qui sont déjà présent sur la page et qu'il ne faut pas répéter ni en reprendre la strucure). Par ailleurs tu ne construiras pas le plan et paragraphes sur ces bases et cette structure, informations fournies.Pour chaque fiche à générer tu décideras de l'approche la plus utile pour nos lecteurs.Le format de sortie sera en HTML sans markdown (pas de header - c'est pour injecter dans un bloc de content donc juste du <li>, <br>, <p> et <b> s'ils sont utiles et nécessaires.)"
         )
         result['text_bloc_complementary'] = generate_text(prompt)
         results.append(result)
